@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "package": "com.rootbeerutils.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "AbstractContainerScreenShulkerLockMixin",
+    "FileResourcesSupplierMixin",
+    "GuiGraphicsExtractorAccessor",
+    "ItemStackShulkerPreviewMixin",
+    "KeyMappingAccessor",
+    "HideLevelLoadingScreenMixin",
+    "HideReloadOverlayMixin",
+    "HideTitleScreenFadeMixin",
+    "ZoomCameraMixin",
+    "ZoomGameRendererMixin",
+    "ScreenRemoveInvoker",
+    "RemoveUselessButtonsOptionsScreenMixin",
+    "RemoveUselessButtonsTitleScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
