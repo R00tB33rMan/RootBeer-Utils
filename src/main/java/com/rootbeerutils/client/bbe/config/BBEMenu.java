@@ -60,7 +60,7 @@ public final class BBEMenu {
         Object registry = instanceField.get(null);
 
         Component name = Component.literal("BBE").withStyle(ChatFormatting.GOLD);
-        Supplier<Identifier> iconSupplier = () -> Identifier.fromNamespaceAndPath(BBE.MOD_ID, "icon.png");
+        Supplier<Identifier> iconSupplier = () -> Identifier.fromNamespaceAndPath("rootbeerutils", "textures/icon.png");
 
         Supplier<List<?>> pagesSupplier = () -> {
             try {
@@ -100,7 +100,10 @@ public final class BBEMenu {
                         () -> options.optimizations.enabled),
                 makeSwitch(switchCtor, "rootbeerutils.bbe.option.skip_vanilla",
                         v -> options.optimizations.skipVanillaForDedicated = v,
-                        () -> options.optimizations.skipVanillaForDedicated)
+                        () -> options.optimizations.skipVanillaForDedicated),
+                makeSwitch(switchCtor, "rootbeerutils.bbe.option.christmas_chests",
+                        v -> options.optimizations.christmasChests = v,
+                        () -> options.optimizations.christmasChests)
         };
 
         Object[] perBlockOptions = new Object[] {

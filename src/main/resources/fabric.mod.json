@@ -12,7 +12,7 @@
     "sources":  "https://example.invalid/rootbeer-utils"
   },
   "license": "MIT",
-  "icon": "assets/rootbeerutils/icon.png",
+  "icon": "assets/rootbeerutils/textures/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [

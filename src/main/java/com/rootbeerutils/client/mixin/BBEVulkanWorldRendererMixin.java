@@ -17,6 +17,7 @@ import com.rootbeerutils.client.bbe.BBE;
 import com.rootbeerutils.client.bbe.api.AltRenderDispatcher;
 import com.rootbeerutils.client.bbe.api.AltRenderers;
 import com.rootbeerutils.client.bbe.config.BBEGameOptions;
+import com.rootbeerutils.client.bbe.config.ConfigCache;
 import com.rootbeerutils.client.bbe.render.OverlayRenderer;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -53,9 +54,10 @@ public class BBEVulkanWorldRendererMixin {
                                                SubmitNodeStorage submitNodeStorage,
                                                Long2ObjectMap<SortedSet<BlockDestructionProgress>> progression,
                                                CallbackInfo ci) {
-        // While VulkanMod runs the standard submitted loop, BBE sign renderers should skip the body
-        // (which is in the terrain mesh) and only emit text. Cleared again on RETURN below.
-        BBE.GlobalScope.limitVanillaSignRendering = true;
+        // Only suppress vanilla sign-body rendering when our chunk-mesh substitution is actually
+        // emitting that geometry. Otherwise, the body is in neither place → invisible signs.
+        BBE.GlobalScope.limitVanillaSignRendering =
+                ConfigCache.masterOptimize && ConfigCache.optimizeSigns;
 
         AltRenderDispatcher dispatcher = BBE.GlobalScope.altRenderDispatcher;
         if (dispatcher == null) {

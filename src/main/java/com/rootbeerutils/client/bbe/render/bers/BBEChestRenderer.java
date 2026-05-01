@@ -1,5 +1,6 @@
 package com.rootbeerutils.client.bbe.render.bers;
 
+import com.rootbeerutils.client.bbe.config.ConfigCache;
 import com.rootbeerutils.client.bbe.model.ChestModelOverride;
 import com.rootbeerutils.client.bbe.render.OverlayRenderer;
 import com.rootbeerutils.client.bbe.ext.BlockEntityRenderStateExt;
@@ -44,20 +45,18 @@ public class BBEChestRenderer<T extends BlockEntity & LidBlockEntity> implements
 
     private static final Map<Direction, Transformation> TRANSFORMATIONS;
     private final SpriteGetter sprites;
-    private final boolean xmasTextures;
 
     private final MultiblockChestResources<ChestModel> models;
     private final MultiblockChestResources<ChestModel> bbeModels;
 
     public BBEChestRenderer(final BlockEntityRendererProvider.Context context) {
         this.sprites = context.sprites();
-        this.xmasTextures = xmasTextures();
         this.models = LAYERS.map((layer) -> new ChestModel(context.bakeLayer(layer)));
         this.bbeModels = LAYERS.map((layer) -> new ChestModelOverride(context.bakeLayer(layer)));
     }
 
     public static boolean xmasTextures() {
-        return SpecialDates.isExtendedChristmas();
+        return ConfigCache.christmasChests || SpecialDates.isExtendedChristmas();
     }
 
     public @NonNull ChestRenderState createRenderState() {
@@ -74,7 +73,7 @@ public class BBEChestRenderer<T extends BlockEntity & LidBlockEntity> implements
         BlockState blockState = hasLevel ? blockEntity.getBlockState() : Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
         state.type = blockState.hasProperty(ChestBlock.TYPE) ? blockState.getValue(ChestBlock.TYPE) : ChestType.SINGLE;
         state.facing = blockState.getValue(ChestBlock.FACING);
-        state.material = getChestMaterial(blockEntity, this.xmasTextures);
+        state.material = getChestMaterial(blockEntity, xmasTextures());
         DoubleBlockCombiner.NeighborCombineResult<? extends ChestBlockEntity> combineResult;
         if (hasLevel && blockState.getBlock() instanceof ChestBlock chestBlock) {
             combineResult = chestBlock.combine(blockState, blockEntity.getLevel(), blockEntity.getBlockPos(), true);

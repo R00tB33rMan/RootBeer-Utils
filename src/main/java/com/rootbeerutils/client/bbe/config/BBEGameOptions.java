@@ -75,6 +75,7 @@ public class BBEGameOptions {
     }
 
     public static class OptimizationSettings {
+
         /**
          * Master switch. When false, BBE renderer-substitution and alt-renderer dispatch are no-ops.
          * Defaults off so the mod ships non-disruptively.
@@ -93,7 +94,7 @@ public class BBEGameOptions {
         public boolean optimizeDecoratedPots = true;
         public boolean optimizeCopperGolemStatues = true;
 
-        public boolean christmasChests = true;
+        public boolean christmasChests = false;
 
         public OptimizationSettings() {
             this.enabled = false;

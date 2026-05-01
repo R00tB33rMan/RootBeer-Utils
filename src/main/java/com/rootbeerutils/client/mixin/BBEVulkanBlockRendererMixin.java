@@ -15,17 +15,12 @@ package com.rootbeerutils.client.mixin;
 import com.rootbeerutils.client.bbe.BBE;
 import com.rootbeerutils.client.bbe.pipeline.BBEEmitter;
 
-import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
-
-import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -38,20 +33,6 @@ import java.util.function.Predicate;
 @Mixin(targets = "net.vulkanmod.render.chunk.build.renderer.BlockRenderer", remap = false)
 public abstract class BBEVulkanBlockRendererMixin {
 
-    // Inherited protected fields on AbstractBlockRenderContext.
-    @Unique protected BlockState blockState;
-    @Unique protected BlockPos blockPos;
-    @Unique protected BlockAndTintGetter renderRegion;
-    @Unique protected RandomSource random;
-
-    // Public on AbstractBlockRenderContext, used to acquire the FRAPI emitter for our substitution.
-    @Unique
-    public abstract QuadEmitter getEmitter();
-
-    // Public on AbstractBlockRenderContext, used to drive our cull predicate.
-    @Unique
-    public abstract boolean isFaceCulled(Direction direction);
-
     @Inject(
             method = "renderBlock(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lorg/joml/Vector3f;)V",
             at = @At(
@@ -62,9 +43,17 @@ public abstract class BBEVulkanBlockRendererMixin {
             allow = 1
     )
     private void rbutils$bbe$emitSubstitution(BlockState state, BlockPos pos, Vector3f offset, CallbackInfo ci) {
-        Predicate<Direction> cullTest = this::isFaceCulled;
+        AbstractBlockRenderContextAccessor self = (AbstractBlockRenderContextAccessor) this;
+        Predicate<Direction> cullTest = self::invokeIsFaceCulled;
         try {
-            BBEEmitter.emit(getEmitter(), renderRegion, blockPos, blockState, random, cullTest);
+            BBEEmitter.emit(
+                    self.invokeGetEmitter(),
+                    self.getRenderRegion(),
+                    self.getBlockPos(),
+                    self.getBlockState(),
+                    self.getRandom(),
+                    cullTest
+            );
         } catch (Throwable t) {
             // Never let a substitution failure abort chunk meshing — it would dirty the chunk.
             BBE.getLogger().error("BBE chunk-mesh substitution threw", t);

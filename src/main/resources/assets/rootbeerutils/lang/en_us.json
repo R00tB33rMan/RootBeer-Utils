@@ -8,6 +8,7 @@
 
   "rootbeerutils.bbe.option.enabled":                      "Enable BBE alt renderers",
   "rootbeerutils.bbe.option.skip_vanilla":                 "Skip vanilla for dedicated alt renderers (advanced)",
+  "rootbeerutils.bbe.option.christmas_chests":             "Christmas chest textures",
   "rootbeerutils.bbe.option.optimize_chests":              "Chests",
   "rootbeerutils.bbe.option.optimize_shulkers":            "Shulker boxes",
   "rootbeerutils.bbe.option.optimize_signs":               "Signs",
