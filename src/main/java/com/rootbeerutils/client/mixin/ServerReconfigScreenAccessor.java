@@ -5,6 +5,10 @@ import net.minecraft.network.Connection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+/**
+ * Exposes the private {@code connection} field of {@code ServerReconfigScreen} so the
+ * bridge swap can pass it on to {@link com.rootbeerutils.client.gui.ReconfigBridgeScreen}.
+ */
 @Mixin(ServerReconfigScreen.class)
 public interface ServerReconfigScreenAccessor {
 

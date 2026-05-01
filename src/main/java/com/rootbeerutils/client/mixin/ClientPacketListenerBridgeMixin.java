@@ -20,9 +20,6 @@ public abstract class ClientPacketListenerBridgeMixin extends ClientCommonPacket
 
     @Inject(method = "handleLogin", at = @At("HEAD"))
     private void rbutils$captureOnRepeatLogin(CallbackInfo ci) {
-        // Only fires on a same-thread, world-already-loaded login — i.e., a re-login that skips
-        // the configuration phase. First-time joins from the title screen have minecraft.level == null
-        // and are handled by clearClientLevel + the loading-overlay path instead.
         if (this.minecraft.isSameThread() && this.minecraft.level != null) {
             CapturedFrame.captureLastFrame();
         }

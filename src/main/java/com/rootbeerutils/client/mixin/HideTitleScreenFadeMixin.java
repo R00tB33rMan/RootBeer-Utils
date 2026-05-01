@@ -15,7 +15,7 @@ public class HideTitleScreenFadeMixin {
 
     @Inject(method = "extractRenderState", at = @At("HEAD"))
     private void rbutils$skipFade(GuiGraphicsExtractor graphics, int mouseX, int mouseY,
-                                  float a, CallbackInfo ci) {
+                                  float partialTick, CallbackInfo ci) {
         this.fading = false;
     }
 }

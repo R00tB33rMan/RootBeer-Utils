@@ -8,17 +8,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * Suppresses the level-loading screen render once a world is already loaded — useful when the
- * screen briefly retriggers during teleporting or dimension transitions and would otherwise flash
- * the loading background over already-visible terrain.
- */
 @Mixin(LevelLoadingScreen.class)
 public class HideLevelLoadingScreenMixin {
 
     @Inject(method = "extractRenderState", at = @At("HEAD"), cancellable = true)
     private void rbutils$skipRender(GuiGraphicsExtractor graphics, int mouseX, int mouseY,
-                                    float a, CallbackInfo ci) {
+                                    float partialTick, CallbackInfo ci) {
         if (Minecraft.getInstance().level == null) {
             return;
         }
@@ -28,7 +23,7 @@ public class HideLevelLoadingScreenMixin {
 
     @Inject(method = "extractBackground", at = @At("HEAD"), cancellable = true)
     private void rbutils$skipBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY,
-                                        float a, CallbackInfo ci) {
+                                        float partialTick, CallbackInfo ci) {
         if (Minecraft.getInstance().level == null) {
             return;
         }
