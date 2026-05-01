@@ -1,11 +1,9 @@
 package com.rootbeerutils.client.zoom;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import org.lwjgl.glfw.GLFW;
 
 public class ZoomClient implements ClientModInitializer {
@@ -15,29 +13,20 @@ public class ZoomClient implements ClientModInitializer {
     public static KeyMapping zoomKey;
 
     /**
-     * Snapshot of {@link Options#smoothCamera} taken at the start of every client tick.
+     * True if Zoom was active on the previous frame; used for press- / release-edge detection.
      */
-    public static boolean smoothCameraAtTickStart;
+    private static boolean zoomedLastFrame = false;
 
     /**
-     * True if Zoom was held last tick (used to detect press/release edges).
+     * Snapshot of {@link net.minecraft.client.Options#smoothCamera} taken at the press edge,
+     * restored on the release edge so we don't permanently overwrite the user's setting.
      */
-    public static boolean zoomHeldLastTick;
-
-    /**
-     * Saved smooth-camera value to restore on release.
-     */
-    public static boolean savedSmoothCamera;
+    private static boolean savedSmoothCamera = false;
 
     @Override
     public void onInitializeClient() {
         zoomKey = KeyMappingHelper.registerKeyMapping(
             new KeyMapping("key.rootbeerutils.zoom", GLFW.GLFW_KEY_C, KeyMapping.Category.MISC));
-
-        ClientTickEvents.START_CLIENT_TICK.register(c ->
-            smoothCameraAtTickStart = c.options.smoothCamera);
-
-        ClientTickEvents.END_CLIENT_TICK.register(ZoomClient::onEndClientTick);
     }
 
     public static boolean isZoomActive() {
@@ -49,23 +38,37 @@ public class ZoomClient implements ClientModInitializer {
         return zoomKey.isDown() && client.level != null && client.player != null;
     }
 
-    private static void onEndClientTick(Minecraft client) {
+    /**
+     * Per-frame zoom-state sync. Called from {@code ZoomFrameSyncMixin} at HEAD of
+     * {@code Minecraft.runTick}, so this runs before mouse-handler input is processed and the
+     * smooth-camera flag is in the correct state by the time vanilla reads it. Three cases:
+     *
+     * <ul>
+     *   <li><b>Press edge</b> (active and not previously active): snapshot the user's
+     *       smooth-camera setting, then force it on.</li>
+     *   <li><b>Release edge</b> (no longer active and was previously active): restore the
+     *       snapshotted value.</li>
+     *   <li><b>Steady hold</b> (active and was previously active): keep the flag pinned on,
+     *       in case some other code path flipped it back off mid-zoom.</li>
+     * </ul>
+     */
+    public static void onFrameStart() {
         if (zoomKey == null) {
             return;
         }
 
-        Options options = client.options;
-        boolean held = isZoomActive();
-        if (held) {
-            if (!zoomHeldLastTick) {
-                savedSmoothCamera = smoothCameraAtTickStart;
-            }
+        Minecraft client = Minecraft.getInstance();
+        boolean active = isZoomActive();
 
-            options.smoothCamera = true;
-            zoomHeldLastTick = true;
-        } else if (zoomHeldLastTick) {
-            options.smoothCamera = savedSmoothCamera;
-            zoomHeldLastTick = false;
+        if (active && !zoomedLastFrame) {
+            savedSmoothCamera = client.options.smoothCamera;
+            client.options.smoothCamera = true;
+        } else if (!active && zoomedLastFrame) {
+            client.options.smoothCamera = savedSmoothCamera;
+        } else if (active) {
+            client.options.smoothCamera = true;
         }
+
+        zoomedLastFrame = active;
     }
 }

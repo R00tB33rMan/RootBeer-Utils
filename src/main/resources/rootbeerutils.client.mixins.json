@@ -21,6 +21,7 @@
     "PackSelectionModelAsyncMixin",
     "ServerReconfigScreenAccessor",
     "ZoomCameraMixin",
+    "ZoomFrameSyncMixin",
     "ZoomGameRendererMixin",
     "ScreenRemoveInvoker",
     "RemoveUselessButtonsOptionsScreenMixin",
