@@ -13,6 +13,7 @@ public final class ReconfigBridgeScreen extends Screen {
 
     public ReconfigBridgeScreen(final Connection connection) {
         super(Component.literal("rbutils.reconfig_bridge"));
+
         this.connection = connection;
     }
 
@@ -29,12 +30,11 @@ public final class ReconfigBridgeScreen extends Screen {
 
     @Override
     public void extractBackground(final @NonNull GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float partialTick) {
-        // Intentionally empty: the captured frame is our background.
+        // No-op: the captured frame is our background.
     }
 
     @Override
     public void tick() {
-        // Vanilla drives connection ticking from the reconfig screen, so we have to as well.
         if (this.connection.isConnected()) {
             this.connection.tick();
         } else {
