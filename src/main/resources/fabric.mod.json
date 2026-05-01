@@ -18,7 +18,8 @@
     "client": [
       "com.rootbeerutils.client.zoom.ZoomClient",
       "com.rootbeerutils.client.shulkerbox.ShulkerBoxPreview",
-      "com.rootbeerutils.client.quickpack.QuickPackClient"
+      "com.rootbeerutils.client.quickpack.QuickPackClient",
+      "com.rootbeerutils.client.bbe.BBEClient"
     ]
   },
   "mixins": [

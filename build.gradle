@@ -22,6 +22,24 @@ java {
 repositories {
     maven { url = 'https://maven.fabricmc.net/' }
     mavenCentral()
+
+    // Modrinth Maven — canonical source for VulkanMod when working online.
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
+
+    // Local jars (e.g. VulkanMod) when working offline.
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
@@ -33,6 +51,12 @@ dependencies {
     // Plain `implementation` (not `modImplementation`); no remapping needed.
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // VulkanMod is a soft, compile-only dependency: the @Pseudo chunk-pipeline mixins
+    // and BBEMenu both no-op at runtime when VulkanMod isn't loaded. The local jar lets
+    // us build offline; swap to the commented Modrinth coordinate to fetch from there.
+    compileOnly files("libs/VulkanMod-0.6.5-26.1.2.jar")
+    // compileOnly "maven.modrinth:vulkanmod:${project.vulkanmod_version}"
 }
 
 processResources {

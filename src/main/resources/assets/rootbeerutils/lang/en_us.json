@@ -4,5 +4,16 @@
   "key.rootbeerutils.quickpack_toggle":      "QuickPack: toggle fast pack loading",
   "rootbeerutils.quickpack.enabled":         "QuickPack enabled (next reload will be fast)",
   "rootbeerutils.quickpack.disabled":        "QuickPack disabled (next reload uses vanilla)",
-  "rootbeerutils.quickpack.reload_time":     "%s — pack reload took %s ms"
+  "rootbeerutils.quickpack.reload_time":     "%s — pack reload took %s ms",
+
+  "rootbeerutils.bbe.option.enabled":                      "Enable BBE alt renderers",
+  "rootbeerutils.bbe.option.skip_vanilla":                 "Skip vanilla for dedicated alt renderers (advanced)",
+  "rootbeerutils.bbe.option.optimize_chests":              "Chests",
+  "rootbeerutils.bbe.option.optimize_shulkers":            "Shulker boxes",
+  "rootbeerutils.bbe.option.optimize_signs":               "Signs",
+  "rootbeerutils.bbe.option.optimize_bells":               "Bells",
+  "rootbeerutils.bbe.option.optimize_beds":                "Beds",
+  "rootbeerutils.bbe.option.optimize_banners":             "Banners",
+  "rootbeerutils.bbe.option.optimize_decorated_pots":      "Decorated pots",
+  "rootbeerutils.bbe.option.optimize_copper_golem_statues": "Copper golem statues"
 }
