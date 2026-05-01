@@ -13,6 +13,7 @@
     "HideLogoRendererMixin",
     "HideReloadOverlayMixin",
     "HideTitleScreenFadeMixin",
+    "MenuFramerateMixin",
     "MinecraftBridgeMixin",
     "MinecraftOverlayBlockMixin",
     "MinecraftPanoramaFixMixin",
