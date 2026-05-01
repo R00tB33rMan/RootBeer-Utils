@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+import com.rootbeerutils.client.bbe.config.ConfigCache;
 import com.rootbeerutils.client.bbe.ext.BlockEntityExt;
 import com.rootbeerutils.client.bbe.ext.RenderingMode;
 
@@ -31,7 +32,14 @@ public final class OverlayRenderer {
         }
 
         BlockEntityExt blockEntityExt = (BlockEntityExt) blockEntity;
-        if (blockEntityExt.rootbeer_utils$renderingMode() == RenderingMode.TERRAIN && blockEntityExt.rootbeer_utils$terrainMeshReady()) {
+
+        boolean substitutionActive =
+                ConfigCache.masterOptimize
+                        && ConfigCache.ENABLED[blockEntityExt.rootbeer_utils$optKind() & 0xFF];
+
+        if (substitutionActive
+                && blockEntityExt.rootbeer_utils$renderingMode() == RenderingMode.TERRAIN
+                && blockEntityExt.rootbeer_utils$terrainMeshReady()) {
             OverlayNodeCollection.submitCrumblingOverlay(poseStack, model, state, light, overlayCoords, tint, crumblingOverlay);
             return true;
         }
