@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @SuppressWarnings("DataFlowIssue")
 @Mixin(ChestSpecialRenderer.class)
 public class BBEChestSpecialRendererMixin {
+
     @Shadow @Final public static MultiblockChestResources<Identifier> CHRISTMAS;
 
     @Redirect(method = "submit", at = @At(value = "INVOKE", target = "net/minecraft/client/renderer/SubmitNodeCollector.submitModel (Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;IIILnet/minecraft/client/resources/model/sprite/SpriteId;Lnet/minecraft/client/resources/model/sprite/SpriteGetter;ILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"))

@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.resources.model.ClientItemInfoLoader;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.SpecialDates;
 
 import net.minecraft.world.level.block.state.properties.ChestType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,39 +37,40 @@ public class BBEClientItemInfoLoaderMixin {
     @Inject(method = "scheduleLoad", at = @At("RETURN"), cancellable = true)
     private static void rewriteChestItemAssets(ResourceManager manager, Executor executor,
                                                CallbackInfoReturnable<CompletableFuture<ClientItemInfoLoader.LoadedClientInfos>> cir) {
-        if (!ShouldOverrideVanilla()) {
-            return;
-        }
-
+        // Patch unconditionally now — the rewrite function itself decides per-model whether
+        // anything needs to change based on current config + the model's existing texture.
         CompletableFuture<ClientItemInfoLoader.LoadedClientInfos> original = cir.getReturnValue();
         cir.setReturnValue(original.thenApply(BBEClientItemInfoLoaderMixin::rewriteChestItems));
-    }
-
-    @Unique
-    private static boolean ShouldOverrideVanilla() {
-        return ConfigCache.optimizeChests
-                && !ConfigCache.christmasChests
-                && SpecialDates.isExtendedChristmas();
     }
 
     @Unique
     private static ClientItemInfoLoader.LoadedClientInfos rewriteChestItems(ClientItemInfoLoader.LoadedClientInfos loaded) {
         Map<Identifier, ClientItem> map = new HashMap<>(loaded.contents());
 
-        patchOne(map, CHEST_ITEM_ID, ChestSpecialRenderer.REGULAR.single());
-        patchOne(map, TRAPPED_CHEST_ITEM_ID, ChestSpecialRenderer.TRAPPED.single());
+        // Decide direction once, applies to both chest types.
+        boolean wantChristmas = ConfigCache.christmasChests;
+
+        if (wantChristmas) {
+            // regular → Christmas
+            patchOne(map, CHEST_ITEM_ID,         /* from */ ChestSpecialRenderer.REGULAR.single(), /* to */ ChestSpecialRenderer.CHRISTMAS.single());
+            patchOne(map, TRAPPED_CHEST_ITEM_ID, /* from */ ChestSpecialRenderer.TRAPPED.single(), /* to */ ChestSpecialRenderer.CHRISTMAS.single());
+        } else {
+            // Christmas → regular (e.g., during the Dec/Jan window when vanilla auto-bakes Christmas)
+            patchOne(map, CHEST_ITEM_ID,         /* from */ ChestSpecialRenderer.CHRISTMAS.single(), /* to */ ChestSpecialRenderer.REGULAR.single());
+            patchOne(map, TRAPPED_CHEST_ITEM_ID, /* from */ ChestSpecialRenderer.CHRISTMAS.single(), /* to */ ChestSpecialRenderer.TRAPPED.single());
+        }
 
         return new ClientItemInfoLoader.LoadedClientInfos(Map.copyOf(map));
     }
 
     @Unique
-    private static void patchOne(Map<Identifier, ClientItem> map, Identifier id, Identifier fallbackTexture) {
+    private static void patchOne(Map<Identifier, ClientItem> map, Identifier id, Identifier fromTexture, Identifier toTexture) {
         ClientItem existing = map.get(id);
         if (existing == null) {
             return;
         }
 
-        ItemModel.Unbaked patchedModel = patchModel(existing.model(), fallbackTexture);
+        ItemModel.Unbaked patchedModel = patchModel(existing.model(), fromTexture, toTexture);
         if (patchedModel != existing.model()) {
             map.put(id, new ClientItem(patchedModel, existing.properties(), existing.registrySwapper()));
         }
@@ -78,11 +78,15 @@ public class BBEClientItemInfoLoaderMixin {
 
     @Unique
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private static ItemModel.Unbaked patchModel(ItemModel.Unbaked model, Identifier fallbackTexture) {
+    private static ItemModel.Unbaked patchModel(ItemModel.Unbaked model, Identifier fromTexture, Identifier toTexture) {
         if (model instanceof SpecialModelWrapper.Unbaked(Identifier base, Optional<Transformation> transformation, SpecialModelRenderer.Unbaked special)) {
             if (special instanceof ChestSpecialRenderer.Unbaked(Identifier tex, float openness, ChestType type)) {
-                if (tex.equals(ChestSpecialRenderer.CHRISTMAS.single()) || tex.getPath().contains("Christmas")) {
-                    ChestSpecialRenderer.Unbaked replaced = new ChestSpecialRenderer.Unbaked(fallbackTexture, openness, type);
+                // Match either the exact "from" texture or — for the Christmas → regular direction —
+                // any path containing "Christmas" (catches case variants in modded packs).
+                boolean matchesFrom = tex.equals(fromTexture)
+                        || (fromTexture.equals(ChestSpecialRenderer.CHRISTMAS.single()) && tex.getPath().contains("Christmas"));
+                if (matchesFrom) {
+                    ChestSpecialRenderer.Unbaked replaced = new ChestSpecialRenderer.Unbaked(toTexture, openness, type);
                     return new SpecialModelWrapper.Unbaked(base, transformation, replaced);
                 }
             }
@@ -97,7 +101,7 @@ public class BBEClientItemInfoLoaderMixin {
             List<SelectItemModel.SwitchCase> newCases = new ArrayList<>(cases.size());
             for (SelectItemModel.SwitchCase sc : cases) {
                 ItemModel.Unbaked child = sc.model();
-                ItemModel.Unbaked patchedChild = patchModel(child, fallbackTexture);
+                ItemModel.Unbaked patchedChild = patchModel(child, fromTexture, toTexture);
                 if (patchedChild != child) {
                     changed = true;
                 }
@@ -105,7 +109,7 @@ public class BBEClientItemInfoLoaderMixin {
                 newCases.add(patchedChild == child ? sc : new SelectItemModel.SwitchCase(sc.values(), patchedChild));
             }
 
-            Optional<ItemModel.Unbaked> newFallback = oldFallback.map(fb -> patchModel(fb, fallbackTexture));
+            Optional<ItemModel.Unbaked> newFallback = oldFallback.map(fb -> patchModel(fb, fromTexture, toTexture));
             if (!oldFallback.equals(newFallback)) {
                 changed = true;
             }
