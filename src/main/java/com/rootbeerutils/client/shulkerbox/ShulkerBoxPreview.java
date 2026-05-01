@@ -9,12 +9,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
 
-/**
- * Entrypoint that registers the shulker-preview tooltip mapping
- * ({@link ShulkerBoxPreviewTooltipComponent} → {@link ShulkerBoxPreviewClientTooltipComponent})
- * and owns the "lock + hover" key. The actual data-component → tooltip-component plumbing
- * lives in {@link com.rootbeerutils.client.mixin.ItemStackShulkerPreviewMixin}.
- */
 public class ShulkerBoxPreview implements ClientModInitializer {
 
     private static KeyMapping lockKey;

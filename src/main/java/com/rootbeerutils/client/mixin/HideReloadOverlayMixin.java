@@ -8,6 +8,7 @@ import net.minecraft.server.packs.resources.ReloadInstance;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -15,15 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-/**
- * Replaces the reload-overlay render with a one-shot completion path: when the underlying
- * {@link ReloadInstance} is done we forward to the queued {@code onFinish} consumer, hand
- * control back to the underlying screen if any, and clear the overlay — without ever drawing
- * the (now-irrelevant) progress bar over the player's view.
- *
- * <p>For a fade-out path that's already running we preserve vanilla's "wait for fade out before
- * clearing" sequencing so cinematic transitions still complete cleanly.
- */
 @Mixin(LoadingOverlay.class)
 public class HideReloadOverlayMixin {
 
@@ -33,41 +25,73 @@ public class HideReloadOverlayMixin {
     @Shadow @Final private Consumer<Optional<Throwable>> onFinish;
     @Shadow private long fadeOutStart;
 
+    /**
+     * Latched true once the very first reload of this JVM has completed. Distinguishes the
+     * boot reload (which we have to detect by ordinal, since 26.1 happens to use the same
+     * {@code fadeIn=false} flag for it as for non-cinematic reloads) from every later reload.
+     */
+    @Unique
+    private static boolean rbutils$pastBootReload = false;
+
     @Inject(method = "extractRenderState", at = @At("HEAD"), cancellable = true)
     private void rbutils$skipReloadRender(GuiGraphicsExtractor graphics, int mouseX, int mouseY,
                                           float a, CallbackInfo ci) {
-        // Fade-out already in progress (vanilla path) → leave alone, only finish quietly.
+        // Boot reload: drive the lifecycle silently, never render. Vanilla still renders mc.screen
+        // (which MinecraftSkipBootScreenMixin makes a logo-less, fade-less TitleScreen) through
+        // the regular screen path, so the player just sees the panorama + buttons until the
+        // reload finishes and onFinish flips us to the real interactive title screen.
+        if (!rbutils$pastBootReload) {
+            if (this.reload.isDone()) {
+                rbutils$drainLifecycle();
+                rbutils$pastBootReload = true;
+            }
+            ci.cancel();
+            return;
+        }
+
+        // Cinematic-reload short-circuit: a vanilla path is mid-fade-out → kill the overlay so the
+        // remaining fade frames never draw. fadeOutStart still being -1 means vanilla hasn't
+        // started fading yet, in which case we let vanilla's body run normally.
         if (!this.fadeIn) {
             if (this.fadeOutStart != -1L) {
                 this.minecraft.setOverlay(null);
                 ci.cancel();
             }
-
             return;
         }
 
-        // Let the active screen still render normally underneath us.
+        // Subsequent reload (F3+T, pack apply, pack unload): keep whatever the player was
+        // looking at visible underneath, then drive the lifecycle when the reload is done.
         if (this.minecraft.level == null && this.minecraft.screen != null) {
             this.minecraft.screen.extractRenderStateWithTooltipAndSubtitles(graphics, mouseX, mouseY, a);
         }
 
         if (this.reload.isDone()) {
-            try {
-                this.reload.checkExceptions();
-                this.onFinish.accept(Optional.empty());
-            } catch (Throwable t) {
-                this.onFinish.accept(Optional.of(t));
-            }
-
-            // Re-init the screen so resized viewports lay out correctly post-reload.
-            if (this.minecraft.screen != null) {
-                Window window = this.minecraft.getWindow();
-                this.minecraft.screen.init(window.getGuiScaledWidth(), window.getGuiScaledHeight());
-            }
-
-            this.minecraft.setOverlay(null);
+            rbutils$drainLifecycle();
         }
 
         ci.cancel();
+    }
+
+    /**
+     * Forwards completion to the queued {@code onFinish} consumer (which sets up the post-reload
+     * screen — typically a {@link net.minecraft.client.gui.screens.TitleScreen}), re-initializes
+     * that screen against the current window dimensions, and disposes the overlay.
+     */
+    @Unique
+    private void rbutils$drainLifecycle() {
+        try {
+            this.reload.checkExceptions();
+            this.onFinish.accept(Optional.empty());
+        } catch (Throwable t) {
+            this.onFinish.accept(Optional.of(t));
+        }
+
+        if (this.minecraft.screen != null) {
+            Window window = this.minecraft.getWindow();
+            this.minecraft.screen.init(window.getGuiScaledWidth(), window.getGuiScaledHeight());
+        }
+
+        this.minecraft.setOverlay(null);
     }
 }

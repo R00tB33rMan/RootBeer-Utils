@@ -13,9 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Strips Telemetry and Credits buttons from the option screen after init.
- */
 @Mixin(OptionsScreen.class)
 public class RemoveUselessButtonsOptionsScreenMixin {
 

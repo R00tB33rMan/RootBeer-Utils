@@ -8,9 +8,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * Skips the title-screen fade-in by clearing the {@code fading} flag at extract time.
- */
 @Mixin(TitleScreen.class)
 public class HideTitleScreenFadeMixin {
 

@@ -25,15 +25,6 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-/**
- * Drop-in replacement for vanilla's {@code FilePackResources} that holds the pack open as a
- * single {@link ZipFile} and indexes its entries once into a sorted tree, so listing resources
- * uses {@link TreeSet#subSet(Object, Object)} (logarithmic) instead of scanning every entry.
- *
- * <p>Hot path tradeoff: vanilla re-opens the zip per query and walks every entry; this class
- * pays the indexing cost once per pack on the first read, then answers all later reads and
- * listings in O(log n + k).
- */
 public class FastFilePackResources extends AbstractPackResources {
 
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -156,7 +147,7 @@ public class FastFilePackResources extends AbstractPackResources {
         for (String prefix : this.prefixStack) {
             String namespacePrefix = prefix + packType.getDirectory() + "/" + namespace + "/";
             String dirPrefix = namespacePrefix + path + "/";
-            String end = dirPrefix + "?";
+            String end = dirPrefix + Character.MAX_VALUE;
             this.fileTree.subSet(dirPrefix, end).forEach(filePath -> {
                 String rlPath = filePath.substring(namespacePrefix.length());
                 Identifier location = Identifier.tryBuild(namespace, rlPath);

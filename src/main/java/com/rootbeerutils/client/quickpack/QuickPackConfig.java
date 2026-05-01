@@ -11,11 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
-/**
- * Tiny on-disk persistence for the QuickPack toggle. Lazily loads on the first read and writes
- * synchronously on every change. Failures are logged and never thrown — QuickPack must not
- * prevent the client from starting if the config file is malformed.
- */
 public final class QuickPackConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("rootbeerutils/quickpack");

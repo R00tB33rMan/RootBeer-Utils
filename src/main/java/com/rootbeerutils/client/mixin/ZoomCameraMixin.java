@@ -7,9 +7,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * Clamps the camera FOV to {@link ZoomClient#ZOOM_HOLD_FOV} while Zoom is held.
- */
 @Mixin(Camera.class)
 public class ZoomCameraMixin {
 

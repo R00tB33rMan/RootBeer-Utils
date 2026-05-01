@@ -24,12 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-/**
- * Wires up shulker-box stacks to surface a {@link ShulkerBoxPreviewTooltipComponent} as their
- * tooltip image (replacing vanilla's default), and suppresses the vanilla {@code CONTAINER}
- * data-component "First N items + remaining" lines so the preview replaces them rather than
- * stacking under them.
- */
 @Mixin(ItemStack.class)
 public class ItemStackShulkerPreviewMixin {
 

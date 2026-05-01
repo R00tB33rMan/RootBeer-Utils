@@ -9,9 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * Hides the held item while Zoom is active, so the hand doesn't fill the zoomed frame.
- */
 @Mixin(GameRenderer.class)
 public class ZoomGameRendererMixin {
 

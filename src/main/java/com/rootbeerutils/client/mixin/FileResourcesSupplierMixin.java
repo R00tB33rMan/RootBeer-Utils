@@ -17,13 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipFile;
 
-/**
- * When QuickPack is enabled, redirects {@code FilePackResources$FileResourcesSupplier#openFull}
- * to construct a {@link FastFilePackResources} (single-zip + indexed file tree) instead of
- * vanilla's per-call zip walker.
- *
- * <p>Errors fall through to vanilla so a corrupt pack never crashes the launch path.
- */
 @Mixin(FilePackResources.FileResourcesSupplier.class)
 public abstract class FileResourcesSupplierMixin {
 

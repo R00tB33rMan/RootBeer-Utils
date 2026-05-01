@@ -8,15 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import org.lwjgl.glfw.GLFW;
 
-/**
- * Hold-to-zoom: clamps render FOV to {@link #ZOOM_HOLD_FOV} while the bound key is down,
- * forces smooth-camera while held, and restores the previous smooth-camera setting on release.
- *
- * <p>The actual FOV change happens in {@code ZoomGameRendererMixin}; the smooth-camera handover
- * happens here (so we can save/restore around the whole hold span). The camera mixin reads
- * {@code smoothCameraAtTickStart} so the value used during one tick is stable across partial-tick
- * camera updates.
- */
 public class ZoomClient implements ClientModInitializer {
 
     public static final float ZOOM_HOLD_FOV = 25.5f;

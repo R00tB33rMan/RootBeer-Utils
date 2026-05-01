@@ -23,14 +23,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Implements the "lock + hover" behavior for shulker-box previews. While the lock key is held
- * over a shulker tooltip we (1) freeze the tooltip's position to where it first appeared so it
- * doesn't track the mouse, and (2) report only the locked slot as hovered so the cursor can
- * move freely over the previewed grid items without flipping the underlying screen's selection.
- *
- * <p>Pickup / drop while a slot is carried releases the lock so the player isn't trapped.
- */
 @Mixin(AbstractContainerScreen.class)
 public class AbstractContainerScreenShulkerLockMixin {
 

@@ -11,16 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * Renders the shulker-box-style tooltip preview: a vanilla-skinned 3×9 grid drawn from the
- * {@code shulker_box.png} GUI texture, populated with the contained items.
- *
- * <p>While {@link ShulkerBoxPreview#isLockKeyPressed()} is true the slot under the mouse is
- * highlighted and an inner item tooltip is rendered for the hovered stack via
- * {@link #renderInnerTooltip(GuiGraphicsExtractor, Font, ItemStack, int, int, GuiGraphicsExtractorAccessor)}.
- * The mixin {@link GuiGraphicsExtractorAccessor} exposes the deferred-tooltip slot so we can
- * render the inner tooltip on a higher stratum without wiping the outer one.
- */
 public class ShulkerBoxPreviewClientTooltipComponent implements ClientTooltipComponent {
 
     private static final Identifier TEXTURE =

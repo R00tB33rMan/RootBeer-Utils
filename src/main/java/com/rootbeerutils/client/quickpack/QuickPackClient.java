@@ -10,11 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.lwjgl.glfw.GLFW;
 
-/**
- * QuickPack toggle key plus reload-time announcer. The fast pack-loading itself happens in
- * {@link com.rootbeerutils.client.quickpack.FastFilePackResources}, swapped in by
- * {@link com.rootbeerutils.client.mixin.FileResourcesSupplierMixin}
- */
 public class QuickPackClient implements ClientModInitializer {
 
     private static KeyMapping toggleKey;

@@ -13,9 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Strips the "Credits & Attribution" footer button after the title screen finishes its init pass.
- */
 @Mixin(TitleScreen.class)
 public class RemoveUselessButtonsTitleScreenMixin {
 
