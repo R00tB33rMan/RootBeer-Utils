@@ -17,6 +17,8 @@
     "MinecraftOverlayBlockMixin",
     "MinecraftPanoramaFixMixin",
     "MinecraftSkipBootScreenMixin",
+    "PackRepositoryAsyncMixin",
+    "PackSelectionModelAsyncMixin",
     "ServerReconfigScreenAccessor",
     "ZoomCameraMixin",
     "ZoomGameRendererMixin",
