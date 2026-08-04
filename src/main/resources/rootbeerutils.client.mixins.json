@@ -33,6 +33,7 @@
     "BBEVulkanWorldRendererMixin",
     "BlockEntityRenderersAccessor",
     "BlockEntityRenderStateAccessor",
+    "CCBMixin",
     "ChestBlockEntityAccessor",
     "ChestLidControllerAccessor",
     "ClientPacketListenerBridgeMixin",

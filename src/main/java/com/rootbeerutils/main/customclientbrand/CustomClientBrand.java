@@ -7,7 +7,7 @@ import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CustomClientBrand implements ModInitializer {
+public class CustomClientBrand  implements ModInitializer {
 
     public static final String MOD_ID = "ClientBrand";
     private static final Logger LOGGER = LoggerFactory.getLogger("ClientBrand-RBU");
@@ -20,5 +20,4 @@ public class CustomClientBrand implements ModInitializer {
         AutoConfig.register(CCBConfig.class, GsonConfigSerializer::new);
         LOGGER.info(MOD_ID + " Loaded!");
     }
-
 }
