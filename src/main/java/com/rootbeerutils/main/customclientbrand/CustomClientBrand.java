@@ -4,7 +4,6 @@ import com.rootbeerutils.main.customclientbrand.config.CCBConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.ClientBrandRetriever;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,6 @@ public class CustomClientBrand implements ModInitializer {
     public void onInitialize() {
         AutoConfig.register(CCBConfig.class, GsonConfigSerializer::new);
         LOGGER.info(MOD_ID + " Loaded!");
-        LOGGER.info("Using: " + ClientBrandRetriever.getClientModName());
     }
 
 }
