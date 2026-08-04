@@ -10,8 +10,8 @@
     "BBEBedBlockEntityMixin",
     "BBEBellBlockEntityMixin",
     "BBEBlockEntityMixin",
-    "BBEBlockEntityRenderStateMixin",
     "BBEBlockEntityRenderersMixin",
+    "BBEBlockEntityRenderStateMixin",
     "BBECampfireBlockEntityMixin",
     "BBEChestBlockEntityMixin",
     "BBEChestSpecialRendererMixin",
@@ -31,19 +31,19 @@
     "BBEVulkanBlockRendererMixin",
     "BBEVulkanTaskDispatcherMixin",
     "BBEVulkanWorldRendererMixin",
-    "BlockEntityRenderStateAccessor",
     "BlockEntityRenderersAccessor",
+    "BlockEntityRenderStateAccessor",
     "ChestBlockEntityAccessor",
     "ChestLidControllerAccessor",
     "ClientPacketListenerBridgeMixin",
     "FileResourcesSupplierMixin",
     "GuiGraphicsExtractorAccessor",
-    "ItemStackShulkerPreviewMixin",
-    "KeyMappingAccessor",
     "HideLevelLoadingScreenMixin",
     "HideLogoRendererMixin",
     "HideReloadOverlayMixin",
     "HideTitleScreenFadeMixin",
+    "ItemStackShulkerPreviewMixin",
+    "KeyMappingAccessor",
     "MenuFramerateMixin",
     "MinecraftBridgeMixin",
     "MinecraftOverlayBlockMixin",
@@ -54,18 +54,21 @@
     "ModelPartAccessor",
     "PackRepositoryAsyncMixin",
     "PackSelectionModelAsyncMixin",
-    "ZoomCameraMixin",
-    "ZoomFrameSyncMixin",
-    "ZoomGameRendererMixin",
+    "RemoveUselessButtonsOptionsScreenMixin",
+    "RemoveUselessButtonsTitleScreenMixin",
     "ScreenRemoveInvoker",
     "ServerReconfigScreenAccessor",
-    "RemoveUselessButtonsOptionsScreenMixin",
-    "RemoveUselessButtonsTitleScreenMixin"
+    "ZoomCameraMixin",
+    "ZoomFrameSyncMixin",
+    "ZoomGameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "overwrites": {
     "requireAnnotations": true
-  }
+  },
+  "mixins": [
+    "CCBMixin"
+  ]
 }

@@ -3,9 +3,10 @@
   "id": "rootbeer_utils",
   "version": "${version}",
   "name": "RootBeer-Utils",
-  "description": "Various useful utilities!",
+  "description": "Various useful utilities + Performance Enhancements!",
   "authors": [
-    "R00tB33rMan"
+    "R00tB33rMan",
+    "Uncompletet"
   ],
   "contact": {
     "homepage": "https://example.invalid/rootbeer-utils",
@@ -22,7 +23,8 @@
       "com.rootbeerutils.client.bbe.BBEClient"
     ],
     "main": [
-      "com.rootbeerutils.main.healthmod.HealthMod"
+      "com.rootbeerutils.main.healthmod.HealthMod",
+      "com.rootbeerutils.main.customclientbrand.CustomClientBrand"
     ]
   },
   "mixins": [
