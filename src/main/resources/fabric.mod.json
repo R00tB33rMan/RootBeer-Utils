@@ -22,7 +22,7 @@
       "com.rootbeerutils.client.bbe.BBEClient"
     ],
     "main": [
-      "com.rootbeerutils.main.healthMod.HealthMod"
+      "com.rootbeerutils.main.healthmod.HealthMod"
     ]
   },
   "mixins": [
