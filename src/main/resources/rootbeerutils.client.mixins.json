@@ -5,6 +5,8 @@
   "client": [
     "AbstractBlockRenderContextAccessor",
     "AbstractContainerScreenShulkerLockMixin",
+    "AppleSkinClientTooltipComponentMixin",
+    "AppleSkinMinecraftMixin",
     "BBEAtlasManagerMixin",
     "BBEBannerBlockEntityMixin",
     "BBEBedBlockEntityMixin",
@@ -70,6 +72,10 @@
     "requireAnnotations": true
   },
   "mixins": [
+    "AppleSkinFoodDataMixin",
+    "AppleSkinItemStackMixin",
+    "AppleSkinPlayerListMixin",
+    "AppleSkinServerPlayerMixin",
     "CCBMixin"
   ]
 }
