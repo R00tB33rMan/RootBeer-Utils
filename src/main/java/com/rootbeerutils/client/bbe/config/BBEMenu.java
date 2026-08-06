@@ -62,7 +62,7 @@ public final class BBEMenu {
         Object registry = instanceField.get(null);
 
         Component name = Component.literal("BBE").withStyle(ChatFormatting.GOLD);
-        Supplier<Identifier> iconSupplier = () -> Identifier.fromNamespaceAndPath("rootbeerutils", "textures/icon.png");
+        Supplier<Identifier> iconSupplier = () -> Identifier.fromNamespaceAndPath("rootbeerutils", "textures/rootbeerutils.png");
 
         Supplier<List<?>> pagesSupplier = () -> {
             try {

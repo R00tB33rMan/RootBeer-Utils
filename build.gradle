@@ -27,6 +27,8 @@ repositories {
     maven { url "https://maven.terraformersmc.com/" }
     maven { url "https://maven.nucleoid.xyz/" }
     maven { url "https://maven.blamejared.com/" }
+    maven { url "https://modmaven.dev" }
+    maven { url "https://cursemaven.com" }
 
     // Modrinth Maven — canonical source for VulkanMod when working online.
     exclusiveContent {
@@ -75,6 +77,7 @@ dependencies {
 
     // AppleSkin
     implementation (shadow "blue.endless:jankson:1.2.3")
+    compileOnly "curse.maven:configured-457570:7820635"
 }
 
 // AppleSkin

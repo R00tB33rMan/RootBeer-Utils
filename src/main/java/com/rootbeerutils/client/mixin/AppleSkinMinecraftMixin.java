@@ -1,11 +1,11 @@
 package com.rootbeerutils.client.mixin;
 
+import com.rootbeerutils.client.appleskin.HUDOverlayHandler;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.rootbeerutils.client.appleskin.client.HUDOverlayHandler;
 
 @Mixin(Minecraft.class)
 public class AppleSkinMinecraftMixin

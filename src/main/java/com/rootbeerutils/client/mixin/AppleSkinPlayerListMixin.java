@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.rootbeerutils.client.appleskin.network.SyncHandler;
+import com.rootbeerutils.main.appleskin.network.SyncHandler;
 
 @Mixin(PlayerList.class)
 public class AppleSkinPlayerListMixin

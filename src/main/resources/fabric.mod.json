@@ -13,24 +13,29 @@
     "sources":  "https://example.invalid/rootbeer-utils"
   },
   "license": "MIT",
-  "icon": "assets/rootbeerutils/textures/icon.png",
-  "environment": "client",
+  "icon": "assets/rootbeerutils/textures/rootbeerutils.png",
+  "environment": "*",
   "entrypoints": {
     "client": [
       "com.rootbeerutils.client.zoom.ZoomClient",
       "com.rootbeerutils.client.shulkerbox.ShulkerBoxPreview",
       "com.rootbeerutils.client.quickpack.QuickPackClient",
-      "com.rootbeerutils.client.bbe.BBEClient"
+      "com.rootbeerutils.client.bbe.BBEClient",
+      "com.rootbeerutils.client.appleskin.AppleSkin"
     ],
     "main": [
       "com.rootbeerutils.main.healthmod.HealthMod",
-      "com.rootbeerutils.main.customclientbrand.CustomClientBrand"
+      "com.rootbeerutils.main.customclientbrand.CustomClientBrand",
+      "com.rootbeerutils.main.appleskin.AppleSkinCommon"
+    ],
+    "modmenu": [
+      "com.rootbeerutils.main.appleskin.gui.ModMenuIntegration"
     ]
   },
   "mixins": [
     {
       "config": "rootbeerutils.client.mixins.json",
-      "environment": "client"
+      "environment": "*"
     }
   ],
   "depends": {
@@ -38,5 +43,12 @@
     "fabric-api":   ">=${fabric_version}",
     "minecraft":    "~${minecraft_version}",
     "java":         ">=25"
+  },
+  "custom": {
+    "configured": {
+      "providers": [
+        "com.rootbeerutils.main.appleskin.gui.ConfiguredConfigProvider"
+      ]
+    }
   }
 }

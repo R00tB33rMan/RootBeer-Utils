@@ -1,5 +1,6 @@
 package com.rootbeerutils.client.mixin;
 
+import com.rootbeerutils.client.appleskin.HUDOverlayHandler;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.entity.player.Player;
@@ -7,7 +8,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.rootbeerutils.client.appleskin.client.HUDOverlayHandler;
 
 @Mixin(Gui.class)
 public class AppleSkinGuiMixin

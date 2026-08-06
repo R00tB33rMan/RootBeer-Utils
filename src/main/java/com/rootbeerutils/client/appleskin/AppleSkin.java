@@ -1,15 +1,13 @@
 package com.rootbeerutils.client.appleskin;
 
+import com.rootbeerutils.main.appleskin.ModConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.components.debug.DebugScreenEntries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.rootbeerutils.client.appleskin.api.AppleSkinApi;
-import com.rootbeerutils.client.appleskin.client.DebugInfoHudEntry;
-import com.rootbeerutils.client.appleskin.client.HUDOverlayHandler;
-import com.rootbeerutils.client.appleskin.client.TooltipOverlayHandler;
-import com.rootbeerutils.client.appleskin.network.ClientSyncHandler;
+import com.rootbeerutils.main.appleskin.api.AppleSkinApi;
+import com.rootbeerutils.main.appleskin.network.ClientSyncHandler;
 
 public class AppleSkin implements ClientModInitializer {
 
@@ -25,6 +23,7 @@ public class AppleSkin implements ClientModInitializer {
         FabricLoader.getInstance().getEntrypointContainers("appleskin", AppleSkinApi.class).forEach(entrypoint -> {
             try
             {
+                LOGGER.info("appleskin loaded entrypoint!");
                 entrypoint.getEntrypoint().registerEvents();
             }
             catch (Throwable e)

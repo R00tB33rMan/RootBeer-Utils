@@ -6,6 +6,7 @@
     "AbstractBlockRenderContextAccessor",
     "AbstractContainerScreenShulkerLockMixin",
     "AppleSkinClientTooltipComponentMixin",
+    "AppleSkinGuiMixin",
     "AppleSkinMinecraftMixin",
     "BBEAtlasManagerMixin",
     "BBEBannerBlockEntityMixin",
