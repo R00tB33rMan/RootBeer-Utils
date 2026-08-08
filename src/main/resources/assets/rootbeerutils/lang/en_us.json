@@ -44,5 +44,7 @@
   "text.autoconfig.appleskin.option.maxHudOverlayFlashAlpha.@Tooltip":              "Alpha value of the flashing icons at their most visible point (1.0 = fully opaque, 0.0 = fully transparent)",
 
   "modmenu.summaryTranslation.appleskin":         "Adds various food-related HUD improvements",
-  "modmenu.descriptionTranslation.appleskin":     "Adds various food-related HUD improvements"
+  "modmenu.descriptionTranslation.appleskin":     "Adds various food-related HUD improvements",
+
+  "commands.gamma.success":    "Set gamma to %s"
 }
